@@ -4,6 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
 
+import { colors } from '../constants/Colors';
+
 import HomeScreen from '../screen/HomeScreen';
 import ChatScreen from '../screen/ChatScreen';
 import SearchScreen from '../screen/SearchScreen';
@@ -29,7 +31,7 @@ const StackNavigation = () => {
             headerShown: false,
             tabBarIcon: ({ focused}) => 
             focused ? (
-              <Entypo name="home" size={24} color="#008e97" />
+              <Entypo name="home" size={24} color={colors.color_stack} />
             ) : (
               <AntDesign name="home" size={24} color="black" />
             )
@@ -44,7 +46,7 @@ const StackNavigation = () => {
             headerShown: false,
             tabBarIcon: ({ focused}) => 
             focused ? (
-              <AntDesign name="search1" size={24} color="#008e97" />
+              <AntDesign name="search1" size={24} color={colors.color_stack} />
             ) : (
               <AntDesign name="search1" size={24} color="black" />
             )
@@ -59,7 +61,7 @@ const StackNavigation = () => {
             headerShown: false,
             tabBarIcon: ({ focused }) => 
             focused ? (
-              <Ionicons name="chatbox-ellipses" size={24} color="#008e97" />
+              <Ionicons name="chatbox-ellipses" size={24} color={colors.color_stack} />
             ) : (
               <Ionicons name="chatbox-ellipses-outline" size={24} color="black" />
             )
@@ -74,7 +76,7 @@ const StackNavigation = () => {
             headerShown: false,
             tabBarIcon: ({ focused}) => 
             focused ? (
-              <Ionicons name="person" size={24} color="#008e97" />
+              <Ionicons name="person" size={24} color={colors.color_stack} />
             ) : (
               <Ionicons name="person-outline" size={24} color="black" />
             )

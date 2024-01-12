@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
+import Screen from '../components/layout/Screen';
 
 const ProfileScreen = () => {
   return (
-    <View>
+    <Screen>
       <Text>ProfileScreen</Text>
-    </View>
+    </Screen>
   );
 };
 

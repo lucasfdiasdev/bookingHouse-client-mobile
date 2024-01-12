@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
+import Screen from '../components/layout/Screen';
 
 const ChatScreen = () => {
   return (
-    <View>
+    <Screen>
       <Text>ChatScreen</Text>
-    </View>
+    </Screen>
   );
 };
 

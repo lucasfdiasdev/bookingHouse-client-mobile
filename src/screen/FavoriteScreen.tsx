@@ -1,10 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native';
+import Screen from '../components/layout/Screen';
 
 const FavoriteScreen = () => {
   return (
-    <View>
+    <Screen>
       <Text>FavoriteScreen</Text>
-    </View>
+    </Screen>
   );
 };
 

@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
 
+import Screen from '../components/layout/Screen';
+
 const SearchScreen = () => {
   return (
-    <View>
+    <Screen>
       <Text>SearchScreen</Text>
-    </View>
+    </Screen>
   );
 };
 
