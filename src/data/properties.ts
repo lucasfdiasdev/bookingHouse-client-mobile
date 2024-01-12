@@ -1,0 +1,88 @@
+import { Property } from "../types/types";
+
+export const properties: Property[] = [
+  {
+    id: 1,
+    images: [
+      'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    ],
+    rentLow: 3750,
+    rentHigh: 31054,
+    bedroomLow: 1,
+    bedroomHigh: 5,
+    name: 'The Hamilton',
+    street: '555 NE 34th St',
+    city: 'Maiami',
+    state: 'Florida',
+    zip: 33137,
+    tags: [
+      'Parking',
+    ],
+    lat: 25.80913,
+    lng: -80.186363,
+  },
+  {
+    id: 2,
+    images: [
+      'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    ],
+    rentLow: 3750,
+    rentHigh: 31054,
+    bedroomLow: 1,
+    bedroomHigh: 5,
+    name: 'The Hamilton',
+    street: '555 NE 34th St',
+    city: 'Maiami',
+    state: 'Florida',
+    zip: 33137,
+    tags: [
+      'Parking',
+    ],
+    lat: 25.78354,
+    lng: -80.21391,
+  },
+  {
+    id: 3,
+    images: [
+      'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    ],
+    rentLow: 3750,
+    rentHigh: 31054,
+    bedroomLow: 1,
+    bedroomHigh: 5,
+    name: 'The Hamilton',
+    street: '555 NE 34th St',
+    city: 'Maiami',
+    state: 'Florida',
+    zip: 33137,
+    tags: [
+      'Parking',
+    ],
+    lat: 25.802389,
+    lng: -80.197739,
+  },
+  {
+    id: 4,
+    images: [
+      'https://images.unsplash.com/photo-1568605114967-8130f3a36994?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+      'https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    ],
+    rentLow: 3750,
+    rentHigh: 31054,
+    bedroomLow: 1,
+    bedroomHigh: 5,
+    name: 'The Hamilton',
+    street: '555 NE 34th St',
+    city: 'Maiami',
+    state: 'Florida',
+    zip: 33137,
+    tags: [
+      'Parking',
+    ],
+    lat: 25.7804316,
+    lng: -80.1962652,
+  },
+];
