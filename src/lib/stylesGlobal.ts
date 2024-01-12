@@ -6,5 +6,8 @@ export const globalStyles = StyleSheet.create({
     borderColor: colors.gray_light,
     borderBottomWidth: 0.3,
     marginVertical: 10
+  },
+  alignDefault: {
+    alignItems: 'center'
   }
 })
