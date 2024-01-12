@@ -15,6 +15,7 @@ const Screen = ({
 }) => {
   return (
     <SafeAreaView style={[style, styles.container]}>
+      <StatusBar barStyle={'dark-content'}/>
       {children}
     </SafeAreaView>
   );
