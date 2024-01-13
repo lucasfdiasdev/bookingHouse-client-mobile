@@ -1,29 +1,68 @@
-import { useState } from 'react';
+import { 
+  useRef, 
+  useState, 
+  useEffect, 
+} from 'react';
+import MapView from 'react-native-maps';
 import { Animated } from 'react-native';
 
 import { properties } from '../data/properties';
-import { HEADERHEIGHT, LISTMARGIN } from '../constants/Constants';
+import { HEADERHEIGHT } from '../constants/Constants';
 
 import Map from '../components/map/Map';
 import Card from '../components/card/Card';
 import Screen from '../components/layout/Screen';
 import HeaderAnimatedList from '../components/HeaderAnimatedList';
 
-const SearchScreen = () => {
+const SearchScreen = ({
+    route
+  } : {
+    route: { params?: any }
+  }) => {
+  
+  const mapRef = useRef<MapView | null>(null);
 
   const [ mapShown, setMapShown ] = useState<boolean>(false);
   const [ scrollAnimation ] = useState(new Animated.Value(0));
+  
+  useEffect(() => {
+    if(route.params) {
+      const { location, lat, lon, boundingbox } = route.params;
+      
+      console.log(location, lat, lon, boundingbox);
+      mapRef?.current?.animateCamera({
+        center: {
+          latitude: Number(route.params.lat),
+          longitude: Number(route.params.lon)
+        }
+      });
+      
+    }
+  }, [route])
 
   return (
     <Screen>
-     <HeaderAnimatedList 
-      mapShown={mapShown} 
-      setMapShown={setMapShown}
-      scrollAnimation={scrollAnimation} 
-    />
+      <HeaderAnimatedList 
+        mapShown={mapShown} 
+        setMapShown={setMapShown}
+        scrollAnimation={scrollAnimation} 
+      />
       {
         mapShown ? (
-          <Map properties={properties}/>
+          <Map 
+            properties={properties}
+            mapRef={mapRef}
+            initialRegion={
+              route.params
+              ? {
+                  latitude: Number(route.params.lat),
+                  longitude: Number(route.params.lon),
+                  latitudeDelta: 0.4,
+                  longitudeDelta: 0.4,
+                }
+              : undefined
+            }
+          />
         ) : (
           <Animated.FlatList
             onScroll={Animated.event([

@@ -17,17 +17,20 @@ import { useNavigation } from '@react-navigation/native';
 import { colors } from '../constants/Colors';
 import { Location } from '../types/locationIQ';
 import { globalStyles } from '../lib/stylesGlobal';
-import { LISTMARGIN } from '../constants/Constants';
 import { getSuggestedLoction } from '../services/location';
 
 import Row from '../components/layout/Row';
 import Screen from '../components/layout/Screen';
-import HeaderModal from '../components/layout/HeaderModal'
+import HeaderModal from '../components/layout/HeaderModal';
+import { LISTMARGIN } from '../constants/Constants';
 
 const FindLocationScreen = () => {
+
   const [ value, setValue ] = useState('');
   const [ suggestions, setSuggestions ] = useState<Location[]>([]);
-
+  
+  const navigation = useNavigation() as any;
+  
   const handleChange = async (val:string) => {
     setValue(val);
 
@@ -47,16 +50,26 @@ const FindLocationScreen = () => {
 
   };
 
+  const handleNavigation = (location: Location) => {
+    navigation.navigate("tabs", {
+      screen: 'search',
+      params: {
+        location: getFormatedLocationText(location),
+        lat: location.lat,
+        lon: location.lon,
+        boundingbox: location.boundingbox,
+      },
+    });
+  };
+
   const handleSubmitEditing = async () => {
     const locations = await getSuggestedLoction(value);
 
     if (locations.length > 0) {
-      console.log('Navigate to search screen padding in', locations[0]);
+      handleNavigation(locations[0]);
 
     };
   };
-
-  const navigation = useNavigation();
 
   const getFormatedLocationText = (item: Location) => {
     let location = item.address.name;
@@ -90,7 +103,8 @@ const FindLocationScreen = () => {
       <Row 
         style={{ 
           alignItems: 'center', 
-          justifyContent: 'center' 
+          justifyContent: 'center',
+          paddingHorizontal: 10
         }}
       >
         <TextInput
@@ -113,7 +127,7 @@ const FindLocationScreen = () => {
           onSubmitEditing={handleSubmitEditing}
         />
         <Pressable
-          style={{ padding: 10 }}
+          style={{ paddingHorizontal: 10 }}
           onPress={() => navigation.goBack()}
         >
           <Text 
@@ -161,7 +175,7 @@ const FindLocationScreen = () => {
               keyExtractor={(item, index) => item.place_id + index }
               renderItem={({ item, index }) => (
                 <TouchableOpacity
-                  onPress={() => console.log(item)}
+                  onPress={() => handleNavigation(item)}
                 >
                   <SuggestedText locationItem={item}/>
                 </TouchableOpacity>
@@ -174,7 +188,7 @@ const FindLocationScreen = () => {
   );
 };
 
-export default FindLocationScreen
+export default FindLocationScreen;
 
 const styles = StyleSheet.create({
   screenContent: {

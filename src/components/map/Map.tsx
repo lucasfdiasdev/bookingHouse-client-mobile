@@ -1,15 +1,16 @@
-import { 
-  useRef, 
-  useState 
-} from 'react';
+import 
+  React, 
+  { 
+    useState 
+  } from 'react';
 import { 
   View, 
   Platform, 
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import MapView from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
+import MapView, { Region } from 'react-native-maps';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -20,12 +21,15 @@ import Card from '../card/Card';
 import MapMarker from './MapMarker';
 
 const Map = ({
-    properties
+    mapRef,
+    properties,
+    initialRegion,
   }: {
-    properties: Property[]
+    properties: Property[];
+    initialRegion?: Region | undefined;
+    mapRef: React.MutableRefObject<MapView | null>;
   }) => {
   const navigation = useNavigation();
-  const mapRef = useRef<MapView | null>(null);
   
   const [ activeIndex, setActiveIndex ] = useState(-1);
 
@@ -63,6 +67,7 @@ const Map = ({
         userInterfaceStyle='light' 
         ref={mapRef}
         onPress={handleMapPress}
+        initialRegion={initialRegion ? initialRegion : undefined }
       >
         {properties.map((i, index) => (
           <MapMarker
