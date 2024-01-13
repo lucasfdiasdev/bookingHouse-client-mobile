@@ -15,10 +15,12 @@ import HeaderLogistics from './HeaderLogistics';
 import HeaderFilterButtons from './HeaderFilterButtons';
 
 const HeaderAnimatedList = ({
+  location,
   mapShown,
   setMapShown,
   scrollAnimation,
 }: {
+  location: string;
   mapShown: boolean;
   setMapShown: (bool: boolean) => void;
   scrollAnimation: Animated.Value;
@@ -80,7 +82,7 @@ const HeaderAnimatedList = ({
       onLayout={onLayout}
     >
       <View style={{ marginHorizontal: LISTMARGIN}}>
-        <HeaderInput/>
+        <HeaderInput location={location}/>
         <HeaderFilterButtons/>
       </View>
 

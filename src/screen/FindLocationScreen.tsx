@@ -10,7 +10,8 @@ import {
   TextInput, 
   Pressable, 
   StyleSheet, 
-  TouchableOpacity, 
+  TouchableOpacity,
+  ScrollView, 
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -23,6 +24,7 @@ import Row from '../components/layout/Row';
 import Screen from '../components/layout/Screen';
 import HeaderModal from '../components/layout/HeaderModal';
 import { LISTMARGIN } from '../constants/Constants';
+import CurrentLocationButton from '../components/CurrentLocationButton';
 
 const FindLocationScreen = () => {
 
@@ -181,7 +183,11 @@ const FindLocationScreen = () => {
                 </TouchableOpacity>
               )}
             />
-          ) : null
+          ) : (
+            <ScrollView bounces={false}>
+              <CurrentLocationButton style={styles.locationBtn}/>
+            </ScrollView>
+          )
         }
       </View>
     </Screen>
@@ -200,5 +206,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomColor: colors.gray_light,
   },
-
+  locationBtn: {
+    marginTop: 40
+  }
 });

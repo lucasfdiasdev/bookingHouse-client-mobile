@@ -46,6 +46,7 @@ const SearchScreen = ({
         mapShown={mapShown} 
         setMapShown={setMapShown}
         scrollAnimation={scrollAnimation} 
+        location={route.params ? route.params.location : 'Find a Location'}
       />
       {
         mapShown ? (

@@ -13,7 +13,11 @@ import { globalStyles } from '../lib/stylesGlobal';
 
 import Row from './layout/Row';
 
-const HeaderInput = () => {
+const HeaderInput = ({
+    location
+  }: {
+    location: string;
+  }) => {
   
   const navigation = useNavigation() as any;
 
@@ -24,7 +28,7 @@ const HeaderInput = () => {
     >
       <Row style={globalStyles.alignDefault}>
         <AntDesign name="search1" size={20} color={colors.primary} />
-        <Text style={{ marginLeft: 10 }}>Find a Location</Text>
+        <Text style={{ marginLeft: 10 }}>{location}</Text>
       </Row>
     </TouchableOpacity>
   );
