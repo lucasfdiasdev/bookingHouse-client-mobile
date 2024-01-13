@@ -11,6 +11,7 @@ import ChatScreen from '../screen/ChatScreen';
 import SearchScreen from '../screen/SearchScreen';
 import ProfileScreen from '../screen/ProfileScreen';
 import FavoriteScreen from '../screen/FavoriteScreen';
+import FindLocationScreen from '../screen/FindLocationScreen';
 
 const StackNavigation = () => {
 
@@ -98,6 +99,10 @@ const StackNavigation = () => {
         <Stack.Screen
           name='favorite'
           component={FavoriteScreen}
+        />
+        <Stack.Screen
+          name='findLocation'
+          component={FindLocationScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>

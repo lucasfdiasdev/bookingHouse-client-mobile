@@ -2,8 +2,9 @@ import {
   Text, 
   Platform, 
   StyleSheet, 
-  TouchableOpacity, 
+  TouchableOpacity,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { AntDesign } from '@expo/vector-icons';
 
@@ -13,10 +14,13 @@ import { globalStyles } from '../lib/stylesGlobal';
 import Row from './layout/Row';
 
 const HeaderInput = () => {
+  
+  const navigation = useNavigation() as any;
+
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => console.log('input header')}
+      onPress={() => navigation.navigate('findLocation') }
     >
       <Row style={globalStyles.alignDefault}>
         <AntDesign name="search1" size={20} color={colors.primary} />

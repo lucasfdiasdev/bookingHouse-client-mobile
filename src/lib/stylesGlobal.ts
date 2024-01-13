@@ -9,5 +9,8 @@ export const globalStyles = StyleSheet.create({
   },
   alignDefault: {
     alignItems: 'center'
+  },
+  marginTopDefault: {
+    marginTop: 10,
   }
-})
+});
