@@ -109,7 +109,7 @@ export default ImageCarousel
 
 const styles = StyleSheet.create({
   img: {
-    height: 250, 
+    height: 200, 
     width: WIDTH, 
     borderTopLeftRadius: 5, 
     borderTopRightRadius: 5, 

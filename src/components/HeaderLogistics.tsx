@@ -40,7 +40,19 @@ const LogisticsButton = ({
   );
 };
 
-const HeaderLogistics = () => {
+const HeaderLogistics = ({
+    mapShown,
+    setMapShown
+  }: {
+    mapShown: boolean;
+    setMapShown: (bool: boolean) => void;
+  }) => {
+
+  const handleMapPress = () => {
+    if(mapShown) return setMapShown(false);
+    setMapShown(true);
+  }
+
   return (
     <Row style={styles.containerLogistics}>
       <Row style={globalStyles.alignDefault}>
@@ -56,12 +68,24 @@ const HeaderLogistics = () => {
           iconName='sort'
           onPress={() => console.log('Sort')}
         />
-        <LogisticsButton 
-          style={{ marginLeft: 20 }} 
-          label='Map'
-          iconName='map-outline'
-          onPress={() => console.log('Map')}
-        />
+        {
+          mapShown ? (
+            <LogisticsButton 
+              style={{ marginLeft: 20 }} 
+              label='List'
+              iconName='format-list-bulleted'
+              onPress={handleMapPress}
+            />
+          ) : (
+            <LogisticsButton 
+              style={{ marginLeft: 20 }} 
+              label='Map'
+              iconName='map-outline'
+              onPress={handleMapPress}
+            />
+
+          )
+        }
       </Row>
     </Row>
   );

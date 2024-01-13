@@ -15,8 +15,12 @@ import HeaderLogistics from './HeaderLogistics';
 import HeaderFilterButtons from './HeaderFilterButtons';
 
 const HeaderAnimatedList = ({
-  scrollAnimation
+  mapShown,
+  setMapShown,
+  scrollAnimation,
 }: {
+  mapShown: boolean;
+  setMapShown: (bool: boolean) => void;
   scrollAnimation: Animated.Value;
 }) => {
 
@@ -83,7 +87,7 @@ const HeaderAnimatedList = ({
       {/* divider */}
       <View style={globalStyles.divider}></View>
 
-      <HeaderLogistics/>
+      <HeaderLogistics setMapShown={setMapShown} mapShown={mapShown}/>
     </Animated.View>
   );
 };
