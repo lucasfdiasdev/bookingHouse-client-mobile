@@ -54,6 +54,21 @@ const StackNavigation = () => {
           }}
         />
         <Tab.Screen
+          name='favorite'
+          component={FavoriteScreen}
+          options={{
+            tabBarLabel: 'Favoritos',
+            tabBarLabelStyle: {color: '#008e97'},
+            headerShown: false,
+            tabBarIcon: ({ focused }) => 
+            focused ? (
+              <AntDesign name="heart" size={24} color={colors.color_stack} />
+            ) : (
+              <AntDesign name="hearto" size={24} color="black" />
+            )
+          }}
+        />
+        <Tab.Screen
           name='chat'
           component={ChatScreen}
           options={{

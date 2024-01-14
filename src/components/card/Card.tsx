@@ -31,8 +31,7 @@ export default Card;
 
 const styles = StyleSheet.create({
   container: { 
-    borderRadius: 5,
-    marginHorizontal: LISTMARGIN,
+    borderRadius: 5, 
     backgroundColor: colors.white,
   },
 });

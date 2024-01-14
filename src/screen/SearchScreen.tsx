@@ -26,7 +26,7 @@ import HeaderAnimatedList from '../components/HeaderAnimatedList';
 const SearchScreen = ({
     route,
   } : {
-    route: { params: any; }
+    route: { params?: any; }
   }) => {
   
   const mapRef = useRef<MapView | null>(null);
@@ -176,10 +176,10 @@ export default SearchScreen;
 
 const styles = StyleSheet.create({
   lottieContainer: {
-    backgroundColor: colors.white,
     flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
-    alignContent: 'center',
+    backgroundColor: colors.white,
   },
   lottie: {
     height: 200,
