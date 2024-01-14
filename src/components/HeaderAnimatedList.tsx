@@ -19,11 +19,13 @@ const HeaderAnimatedList = ({
   mapShown,
   setMapShown,
   scrollAnimation,
+  availableProperties,
 }: {
   location: string;
   mapShown: boolean;
-  setMapShown: (bool: boolean) => void;
+  availableProperties?: number;
   scrollAnimation: Animated.Value;
+  setMapShown: (bool: boolean) => void;
 }) => {
 
   const [ offsetAnimation ] = useState(new Animated.Value(0));
@@ -89,7 +91,11 @@ const HeaderAnimatedList = ({
       {/* divider */}
       <View style={globalStyles.divider}></View>
 
-      <HeaderLogistics setMapShown={setMapShown} mapShown={mapShown}/>
+      <HeaderLogistics 
+        mapShown={mapShown}
+        setMapShown={setMapShown}
+        availableProperties={availableProperties} 
+      />
     </Animated.View>
   );
 };

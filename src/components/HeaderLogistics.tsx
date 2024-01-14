@@ -42,9 +42,11 @@ const LogisticsButton = ({
 
 const HeaderLogistics = ({
     mapShown,
-    setMapShown
+    setMapShown,
+    availableProperties
   }: {
     mapShown: boolean;
+    availableProperties?: number;
     setMapShown: (bool: boolean) => void;
   }) => {
 
@@ -57,7 +59,11 @@ const HeaderLogistics = ({
     <Row style={styles.containerLogistics}>
       <Row style={globalStyles.alignDefault}>
         <MaterialCommunityIcons name="map-marker" size={18} color={colors.primary} />
-        <Text style={{ marginHorizontal: 6, fontSize: 15 }}>12 available</Text>
+        <Text style={{ marginHorizontal: 6, fontSize: 15 }}>{
+          availableProperties
+          ? `${availableProperties} propriedades`
+          : `Search Spaces`
+        }</Text>
         
         <LogisticsButton label='Save' onPress={() => console.log('Save')}/>
       </Row>
