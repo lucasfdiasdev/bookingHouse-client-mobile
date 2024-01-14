@@ -11,14 +11,14 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Row from './Row';
 
 const HeaderModal = ({
-    text,
-    style,
-    xShown,
-  }: {
-    text?: string;
-    xShown?: boolean;
-    style?: ViewStyle | ViewStyle[];
-  }) => {
+  text,
+  style,
+  xShown,
+}: {
+  text?: string;
+  xShown?: boolean;
+  style?: ViewStyle | ViewStyle[];
+}) => {
   
   const navigation = useNavigation() as any;
   
@@ -30,9 +30,9 @@ const HeaderModal = ({
             <MaterialCommunityIcons 
               onPress={() => navigation.goback()}
               style={styles.x}
-              name="close" 
-              size={24} 
-              color="black" 
+              name="close"
+              size={24}
+              color="black"
             />
           ): null
         }

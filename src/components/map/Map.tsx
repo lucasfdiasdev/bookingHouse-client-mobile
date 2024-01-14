@@ -21,15 +21,15 @@ import Card from '../card/Card';
 import MapMarker from './MapMarker';
 
 const Map = ({
-    mapRef,
-    properties,
-    initialRegion,
-  }: {
-    properties: Property[];
-    initialRegion?: Region | undefined;
-    mapRef: React.MutableRefObject<MapView | null>;
-  }) => {
-  const navigation = useNavigation();
+  mapRef,
+  properties,
+  initialRegion,
+}: {
+  properties: Property[];
+  initialRegion?: Region | undefined;
+  mapRef: React.MutableRefObject<MapView | null>;
+}) => {
+  const navigation = useNavigation() as any;
   
   const [ activeIndex, setActiveIndex ] = useState(-1);
 

@@ -15,9 +15,9 @@ import Screen from '../components/layout/Screen';
 import HeaderAnimatedList from '../components/HeaderAnimatedList';
 
 const SearchScreen = ({
-    route
+    route,
   } : {
-    route: { params?: any }
+    route: { params: any; }
   }) => {
   
   const mapRef = useRef<MapView | null>(null);
@@ -27,9 +27,9 @@ const SearchScreen = ({
   
   useEffect(() => {
     if(route.params) {
-      const { location, lat, lon, boundingbox } = route.params;
+      const { location, lat, lon, } = route.params;
       
-      console.log(location, lat, lon, boundingbox);
+      console.log(location, lat, lon);
       mapRef?.current?.animateCamera({
         center: {
           latitude: Number(route.params.lat),

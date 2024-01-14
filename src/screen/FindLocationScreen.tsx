@@ -13,18 +13,21 @@ import {
   TouchableOpacity,
   ScrollView, 
 } from 'react-native';
+import { useQueryClient } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
 
 import { colors } from '../constants/Colors';
 import { Location } from '../types/locationIQ';
 import { globalStyles } from '../lib/stylesGlobal';
+import { LISTMARGIN } from '../constants/Constants';
 import { getSuggestedLoction } from '../services/location';
 
 import Row from '../components/layout/Row';
 import Screen from '../components/layout/Screen';
 import HeaderModal from '../components/layout/HeaderModal';
-import { LISTMARGIN } from '../constants/Constants';
+import RecentSearchList from '../components/RecentSearchList';
 import CurrentLocationButton from '../components/CurrentLocationButton';
+import {  getFormattedLocationText } from '../utils/getFormattedLocationText';
 
 const FindLocationScreen = () => {
 
@@ -33,6 +36,29 @@ const FindLocationScreen = () => {
   
   const navigation = useNavigation() as any;
   
+  const queryClient = useQueryClient();
+  const recentSearches: Location[] | undefined = queryClient.getQueryData('recentSearches');
+
+  const setRecentSearch = (location: Location) => {
+    queryClient.setQueryData('recentSearches', () => {
+      if (recentSearches) {
+        let included = false;
+        for (let i of recentSearches) {
+          if (
+            i.display_name === location.display_name && i.lon === location.lon && i.lat === location.lat
+          ) {
+            included = true;
+            break;
+          }
+        } 
+        if (!included) return [location, ...recentSearches];
+        return recentSearches;
+      };
+
+      return [location];
+    });
+  };
+
   const handleChange = async (val:string) => {
     setValue(val);
 
@@ -48,15 +74,16 @@ const FindLocationScreen = () => {
       if (val.length === 0) {
         setSuggestions([]);
       };
-    };
 
+    };
   };
 
   const handleNavigation = (location: Location) => {
-    navigation.navigate("tabs", {
+    setRecentSearch(location);
+    navigation.navigate('tabs', {
       screen: 'search',
       params: {
-        location: getFormatedLocationText(location),
+        location: getFormattedLocationText(location),
         lat: location.lat,
         lon: location.lon,
         boundingbox: location.boundingbox,
@@ -71,14 +98,6 @@ const FindLocationScreen = () => {
       handleNavigation(locations[0]);
 
     };
-  };
-
-  const getFormatedLocationText = (item: Location) => {
-    let location = item.address.name;
-    if ( item.type === 'city' && item.address.state)
-      location += ',' + item.address.state;
-    return location;
-
   };
 
   const getInput = () => {
@@ -99,8 +118,8 @@ const FindLocationScreen = () => {
         onChangeText={handleChange}
         onSubmitEditing={handleSubmitEditing}
       />
-
     );
+
     return (
       <Row 
         style={{ 
@@ -149,19 +168,19 @@ const FindLocationScreen = () => {
   };
 
   const SuggestedText = ({
-      locationItem
-    }: {
-      locationItem: Location
-    }) => {
+    locationItem
+  }: {
+    locationItem: Location
+  }) => {
 
-    const location = getFormatedLocationText(locationItem);
+    const location = getFormattedLocationText(locationItem);
 
     return (
       <Row style={styles.suggestedContainer}>
         <Text>{location}</Text>
       </Row>
     );
-  }
+  };
 
   return (
     <Screen>
@@ -177,7 +196,9 @@ const FindLocationScreen = () => {
               keyExtractor={(item, index) => item.place_id + index }
               renderItem={({ item, index }) => (
                 <TouchableOpacity
-                  onPress={() => handleNavigation(item)}
+                  onPress={() => {
+                    handleNavigation(item)
+                  }}
                 >
                   <SuggestedText locationItem={item}/>
                 </TouchableOpacity>
@@ -186,6 +207,10 @@ const FindLocationScreen = () => {
           ) : (
             <ScrollView bounces={false}>
               <CurrentLocationButton style={styles.locationBtn}/>
+              <RecentSearchList 
+                style={styles.recentSearchContainer}
+                recentSearches={recentSearches}  
+              />
             </ScrollView>
           )
         }
@@ -208,5 +233,8 @@ const styles = StyleSheet.create({
   },
   locationBtn: {
     marginTop: 40
+  },
+  recentSearchContainer: {
+    marginTop: 30,
   }
 });
