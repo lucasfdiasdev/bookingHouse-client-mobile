@@ -59,7 +59,7 @@ const HeaderLogistics = ({
     <Row style={styles.containerLogistics}>
       <Row style={globalStyles.alignDefault}>
         <MaterialCommunityIcons name="map-marker" size={18} color={colors.primary} />
-        <Text style={{ marginHorizontal: 6, fontSize: 15 }}>{
+        <Text style={{ marginHorizontal: 4, fontSize: 15, color: '#7e7e7e' }}>{
           availableProperties
           ? `${availableProperties} propriedades`
           : `Search Spaces`

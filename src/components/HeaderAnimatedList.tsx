@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { 
   View, 
-  Animated, 
-  StyleSheet, 
+  Animated,
   LayoutChangeEvent, 
 } from 'react-native';
 
@@ -101,7 +100,3 @@ const HeaderAnimatedList = ({
 };
 
 export default HeaderAnimatedList;
-
-const styles = StyleSheet.create({
-
-})

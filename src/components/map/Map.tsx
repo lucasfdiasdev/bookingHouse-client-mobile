@@ -1,6 +1,7 @@
 import 
   React, 
   { 
+    useEffect,
     useState 
   } from 'react';
 import { 
@@ -8,6 +9,8 @@ import {
   Platform, 
   StyleSheet,
   TouchableOpacity,
+  Pressable,
+  Text,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import MapView, { Region } from 'react-native-maps';
@@ -19,19 +22,44 @@ import { colors } from '../../constants/Colors';
 
 import Card from '../card/Card';
 import MapMarker from './MapMarker';
+import { getPropertiesInArea } from '../../data/properties';
+
+// used to persist the region if search area from the map
+let mapRegion: Region | undefined = undefined;
 
 const Map = ({
   mapRef,
   properties,
   initialRegion,
+  location,
+  setLocation,
+  setProperties,
 }: {
   properties: Property[];
   initialRegion?: Region | undefined;
   mapRef: React.MutableRefObject<MapView | null>;
+  location: string;
+  setLocation: (location: string) => void;
+  setProperties: (properties: Property[]) => void;
 }) => {
   const navigation = useNavigation() as any;
+
+  useEffect(() => {
+    if (location === 'Map Area') return;
+
+    if (initialRegion) {
+      setShowSearchAreaButton(false);
+      setRegion(initialRegion);
+    }
+  }, [initialRegion])
+
   
   const [ activeIndex, setActiveIndex ] = useState(-1);
+  const [ showSearchAreaButton, setShowSearchAreaButton ] = useState(false);
+  const [ boundingbox, setBoundingbox ] = useState<number[]>([]) // used for searching properties in the region
+  const [ region, setRegion ] = useState<Region | undefined>(
+    mapRegion ? mapRegion : undefined
+  );
 
   const unFocusProperty = () => {
     setActiveIndex(-1);
@@ -45,29 +73,60 @@ const Map = ({
   };
 
   const handleMarkerPress = (index: number) => {
-    if (Platform.OS === 'ios') {
-      setTimeout(() => {
-        mapRef.current?.animateCamera({
-          center: {
-            latitude: properties[index].lat,
-            longitude: properties[index].lng,
-          },
-        });
-      }, 100);
-    };
+    setTimeout(() => {
+      mapRef.current?.animateCamera({
+        center: {
+          latitude: properties[index].lat,
+          longitude: properties[index].lng,
+        },
+      });
+    }, 100);
+
+    setTimeout(() => {
+      const newRegion: Region ={
+        latitude: properties[index].lat,
+        latitudeDelta: region?.latitudeDelta ? region.latitudeDelta : 0.4,
+        longitude: properties[index].lng,
+        longitudeDelta: region?.longitudeDelta ? region.longitudeDelta : 0.4,
+      };
+
+      setRegion(newRegion);
+    }, 600)
 
     setActiveIndex(index);
     navigation.setOptions({ tabBarStyle: { display: 'none' }});
   };
 
+  const handleSearchAreaButtonPress = () => {
+    setProperties(getPropertiesInArea(boundingbox));
+    setLocation("Map Area");
+    mapRegion = region
+    setShowSearchAreaButton(false);
+  }
+
   return (
     <View style={styles.container}>
       <MapView 
+        provider={'google'}
         style={styles.map} 
         userInterfaceStyle='light' 
         ref={mapRef}
         onPress={handleMapPress}
         initialRegion={initialRegion ? initialRegion : undefined }
+        onRegionChangeComplete={(region, isGuesture) => {
+          if(isGuesture?.isGesture) {
+            if (!showSearchAreaButton)  setShowSearchAreaButton(true);
+
+            const newBoundingbox = [
+              region.latitude - region.latitudeDelta / 2,
+              region.latitude + region.latitudeDelta / 2,
+              region.longitude - region.longitudeDelta / 2,
+              region.longitude + region.longitudeDelta / 2
+            ];
+            setRegion(region);
+            setBoundingbox(newBoundingbox);
+          }
+        }}
       >
         {properties.map((i, index) => (
           <MapMarker
@@ -103,6 +162,15 @@ const Map = ({
           </>
         )
       }
+
+      {showSearchAreaButton && activeIndex === -1 && (
+        <Pressable 
+          style={styles.searchAreaButton}
+          onPress={handleSearchAreaButtonPress}
+        >
+          <Text style={{ textAlign: 'center', fontSize: 18, fontWeight: 'bold', color: colors.primary}}>Search Area</Text>
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -130,5 +198,18 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     position: 'absolute',
     backgroundColor: colors.white,
+  },
+  searchAreaButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderColor: colors.gray_light,
+    borderWidth: 1,
+    backgroundColor: colors.white,
+
+    position: 'absolute',
+    bottom: 30,
+    zIndex: 100,
+    alignSelf: 'center',
+    borderRadius: 30
   }
 });
