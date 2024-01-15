@@ -1,4 +1,8 @@
-{
+import { light } from "@eva-design/eva";
+
+export const theme = {
+  ...light,
+
   "color-primary-100": "#F2D2FB",
   "color-primary-200": "#E1A6F8",
   "color-primary-300": "#C477EA",
