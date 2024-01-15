@@ -112,10 +112,6 @@ const StackNavigation = () => {
           component={BottomTabs}
         />
         <Stack.Screen
-          name='favorite'
-          component={FavoriteScreen}
-        />
-        <Stack.Screen
           name='findLocation'
           component={FindLocationScreen}
         />
