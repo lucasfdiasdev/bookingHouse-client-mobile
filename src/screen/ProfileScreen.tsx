@@ -5,15 +5,16 @@ import {
   Text,
   Pressable, 
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
+
+import { colors } from '../constants/Colors';
+import { globalStyles } from '../lib/stylesGlobal';
 import { LISTMARGIN } from '../constants/Constants';
 
 import Screen from '../components/layout/Screen';
-import { useNavigation } from '@react-navigation/native';
-import { globalStyles } from '../lib/stylesGlobal';
-import AuthButton from '../components/auth/AuthButton';
-import { colors } from '../constants/Colors';
 import ButtonList from '../components/ButtonList';
+import AuthButton from '../components/auth/AuthButton';
 
 const ProfileScreen = () => {
   const user = undefined;
@@ -29,7 +30,7 @@ const ProfileScreen = () => {
       onPress: () => console.log('navigate to view my properties'),
     },
   ];
-
+  
   const supportButtons = [
     {
       label: 'Help Center',
@@ -40,7 +41,7 @@ const ProfileScreen = () => {
       onPress: () => console.log('navigate to Terms and Conditions'),
     },
   ];
-
+  
   const rentingButtons = [
     {
       label: 'Favorite Properties',
@@ -62,7 +63,7 @@ const ProfileScreen = () => {
       onPress: () => console.log('navigate to Rent Payments'),
     },
   ];
-
+  
   const accountButtons = [
     {
       label: 'Account Settings',
@@ -77,7 +78,7 @@ const ProfileScreen = () => {
       onPress: () => console.log('navigate to Banks and Cards'),
     },
   ];
-
+  
   const rentalManagementButtons = [
     {
       label: 'Add a Property',
@@ -159,8 +160,21 @@ const ProfileScreen = () => {
             </Text>
           </>
         )}
-        
       </ScrollView>
+      
+      <Pressable
+        onPress={() => navigation.navigate('forgoutPassword')}
+      >
+        <Text>Forgot Password</Text>
+      </Pressable>
+
+      <Pressable
+        onPress={() => navigation.navigate('resetPassword', {
+          token: 'agnoiueaegrioaeoirn'
+        })}
+      >
+        <Text>Reset Password</Text>
+      </Pressable>
     </Screen>
   );
 };

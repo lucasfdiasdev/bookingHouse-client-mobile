@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Pressable,
  } from 'react-native';
+ import { useNavigation } from '@react-navigation/native';
 
 import { colors } from '../../constants/Colors';
 import { WIDTH } from '../../constants/Constants';
@@ -14,11 +15,14 @@ const AuthButton = ({
 }: {
   style?: ViewStyle | ViewStyle[];
 }) => {
+
+  const navigation = useNavigation() as any;
+
   return (
     <View style={style}>
       <Pressable
         style={styles.containerSignIn}
-        onPress={() => console.log('navigate to SignIn')}
+        onPress={() => navigation.navigate('login')}
       >
         <Text 
           style={{ 
@@ -34,7 +38,7 @@ const AuthButton = ({
 
       <Pressable
         style={styles.containerSignUp}
-        onPress={() => console.log('navigate to SignIn')}
+        onPress={() => navigation.navigate('register')}
       >
         <Text 
           style={{ 
