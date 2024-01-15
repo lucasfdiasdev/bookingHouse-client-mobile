@@ -8,9 +8,13 @@ import { colors } from '../constants/Colors';
 
 import HomeScreen from '../screen/HomeScreen';
 import ChatScreen from '../screen/ChatScreen';
+import LoginScreen from '../screen/LoginScreen';
 import SearchScreen from '../screen/SearchScreen';
 import ProfileScreen from '../screen/ProfileScreen';
+import ResetPassword from '../screen/ResetPassword';
 import FavoriteScreen from '../screen/FavoriteScreen';
+import RegisterScreen from '../screen/RegisterScreen';
+import ForgoutPassword from '../screen/ForgoutPassword';
 import FindLocationScreen from '../screen/FindLocationScreen';
 
 const StackNavigation = () => {
@@ -114,6 +118,22 @@ const StackNavigation = () => {
         <Stack.Screen
           name='findLocation'
           component={FindLocationScreen}
+        />
+        <Stack.Screen
+          name='resetPassword'
+          component={ResetPassword}
+        />
+        <Stack.Screen
+          name='forgoutPassword'
+          component={ForgoutPassword}
+        />
+        <Stack.Screen
+          name='login'
+          component={LoginScreen}
+        />
+        <Stack.Screen
+          name='register'
+          component={RegisterScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
