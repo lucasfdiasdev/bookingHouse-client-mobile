@@ -1,14 +1,18 @@
 import * as yup from 'yup';
 import { Formik } from 'formik';
+import { useMutation } from 'react-query';
+import { useNavigation } from '@react-navigation/native';
+import { Button, Input, Text } from '@ui-kitten/components';
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+import { useAuth } from '../hooks/useAuth';
+import { loginUser } from '../services/user';
 import { LISTMARGIN } from '../constants/Constants';
-import { useNavigation } from '@react-navigation/native';
-import { Button, Input, Text } from '@ui-kitten/components';
 
 import OrDivider from './OrDivider';
 import Screen from '../components/layout/Screen';
+import Loading from '../components/layout/Loading';
 import InputPassword from '../components/InputPassword';
 import AppleButton from '../components/auth/AppleButton';
 import HeaderModal from '../components/layout/HeaderModal';
@@ -17,6 +21,20 @@ import FacebookButton from '../components/auth/FacebookButton';
 
 const LoginScreen = () => {
   const navigation = useNavigation() as any;
+  const { login } = useAuth();
+
+  const nativeLogin = useMutation(async (values: { email: string; password: string }) => {
+    const user = await loginUser(values.email, values.password);
+    if (user) {
+      login(user);
+      navigation.goBack();
+    }
+
+  });
+
+  if (nativeLogin.isLoading) return <Loading/>
+
+
   return (
     <KeyboardAwareScrollView bounces={false}>
       <Screen style={styles.container}>
@@ -34,7 +52,7 @@ const LoginScreen = () => {
               password: yup.string().required("A password is required."),
             })}
             onSubmit={(values) => {
-              console.log(values)
+              nativeLogin.mutate(values);
             }}
           >
           {({

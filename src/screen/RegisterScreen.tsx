@@ -4,14 +4,18 @@ import {
   Platform, 
   StyleSheet, 
 } from 'react-native';
+import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
+import { Button, Input, Text } from '@ui-kitten/components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+import { useAuth } from '../hooks/useAuth';
+import { registerUser } from '../services/user';
 import { LISTMARGIN } from '../constants/Constants';
-import { Button, Input, Text } from '@ui-kitten/components';
 
 import OrDivider from './OrDivider';
 import Screen from '../components/layout/Screen';
+import Loading from '../components/layout/Loading';
 import InputPassword from '../components/InputPassword';
 import AppleButton from '../components/auth/AppleButton';
 import HeaderModal from '../components/layout/HeaderModal';
@@ -19,7 +23,33 @@ import GoogleButton from '../components/auth/GoogleButton';
 import FacebookButton from '../components/auth/FacebookButton';
 
 const RegisterScreen = () => {
+  const { login } = useAuth();
   const navigation = useNavigation();
+
+  
+
+  const nativeRegister = useMutation(
+    async(values: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      password: string;
+    }) => {
+      const user = await registerUser(
+        values.firstName, 
+        values.lastName, 
+        values.email, 
+        values.password,
+      );
+      
+      if (user) {
+        login(user);
+        navigation.goBack();
+      };
+    }
+  );
+
+  if (nativeRegister.isLoading) return <Loading/>
 
   return (
     <KeyboardAwareScrollView>
@@ -48,7 +78,7 @@ const RegisterScreen = () => {
                 ),
             })}
             onSubmit={(values) => {
-              console.log('Register', values)
+              nativeRegister.mutate(values);
             }}
           >
           {({
