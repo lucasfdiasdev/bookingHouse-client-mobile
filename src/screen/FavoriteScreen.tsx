@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { 
   Text, 
   Pressable, 
@@ -16,6 +16,7 @@ import {
 
 import { Property } from '../types/types';
 import { colors } from '../constants/Colors';
+import { AuthContext } from '../context/context';
 import { LISTMARGIN } from '../constants/Constants';
 
 import Row from '../components/layout/Row';
@@ -62,12 +63,14 @@ const ButtonHeader = ({
 };
 
 const FavoriteScreen = () => {
-  const user = false;
+
+  const { user } = useContext(AuthContext); 
+  
   const likedProperties = undefined;
   const contactedProperties = undefined;
   const applicationProperties = undefined;
   const [activeIndex, setActiveIndex] = useState<number>(0);
-
+  
   const getButtonAppearance = (buttonIndex: number) => {
     if (activeIndex === buttonIndex) return 'filled';
     return 'ghost';

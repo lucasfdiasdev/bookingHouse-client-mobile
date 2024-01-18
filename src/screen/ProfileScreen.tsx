@@ -1,3 +1,4 @@
+import { useContext } from 'react';
 import { 
   View,
   ScrollView,
@@ -7,8 +8,9 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-
+import { useAuth } from '../hooks/useAuth';
 import { colors } from '../constants/Colors';
+import { AuthContext } from '../context/context';
 import { globalStyles } from '../lib/stylesGlobal';
 import { LISTMARGIN } from '../constants/Constants';
 
@@ -16,8 +18,12 @@ import Screen from '../components/layout/Screen';
 import ButtonList from '../components/ButtonList';
 import AuthButton from '../components/auth/AuthButton';
 
+import { Button } from '@ui-kitten/components';
+
 const ProfileScreen = () => {
-  const user = undefined;
+
+  const { logout } = useAuth();
+  const { user } = useContext(AuthContext);
   const navigation = useNavigation() as any;
 
   const firstSignedOutButtos = [
@@ -102,10 +108,10 @@ const ProfileScreen = () => {
             ? (
               <>
                 <Text style={[styles.userName, globalStyles.h4]}>
-                  Welcome, User's FirstName
+                  Welcome{user.firstName ? `, ${user.firstName}` : ""}
                 </Text>
                 <Text style={[styles.email, globalStyles.h6]}>
-                  user@exemple.com
+                 {user.email}
                 </Text>
               </>
             ) : (
@@ -140,7 +146,7 @@ const ProfileScreen = () => {
             >
               <Pressable
                 style={styles.button}
-                onPress={() => console.log('log users out')}
+                onPress={logout}
               >
                 <Text style={styles.textButton}>Sign Out</Text>
               </Pressable>
