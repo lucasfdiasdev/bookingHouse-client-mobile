@@ -7,11 +7,17 @@ import {
 import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Input, Text } from '@ui-kitten/components';
+import * as Google from 'expo-auth-session/providers/google';
+import * as Facebook from 'expo-auth-session/providers/facebook';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { useAuth } from '../hooks/useAuth';
-import { registerUser } from '../services/user';
 import { LISTMARGIN } from '../constants/Constants';
+import { 
+  registerUser, 
+  googleLoginOrRegister, 
+  facebookLoginOrRegister, 
+} from '../services/user';
 
 import OrDivider from './OrDivider';
 import Screen from '../components/layout/Screen';
@@ -24,9 +30,18 @@ import FacebookButton from '../components/auth/FacebookButton';
 
 const RegisterScreen = () => {
   const { login } = useAuth();
-  const navigation = useNavigation();
+  const navigation = useNavigation() as any;
 
-  
+  const [___, _____, googlePromptAsync ] = Google.useAuthRequest({
+    expoClientId: "611513721528-6t92tdms9vhv6lp1sssq8nurt5kt79te.apps.googleusercontent.com",
+    iosClientId: "",
+    androidClientId: "",
+    webClientId: "",
+  });
+
+  const [ _, __, fbPropmtAsync ] = Facebook.useAuthRequest({
+    clientId: "249249161545512"
+  });
 
   const nativeRegister = useMutation(
     async(values: {
@@ -45,11 +60,43 @@ const RegisterScreen = () => {
       if (user) {
         login(user);
         navigation.goBack();
+
       };
     }
   );
 
-  if (nativeRegister.isLoading) return <Loading/>
+  const facebookRegister = useMutation(async () => {
+    const response = await fbPropmtAsync();
+    if(response.type === 'success') {
+      const { access_token } = response.params;
+
+     const user = await facebookLoginOrRegister(access_token);
+
+     if (user) {
+      login(user);
+      navigation.goBack();
+     }
+
+    };
+  });
+
+  const googleRegister = useMutation(async () => {
+    const response = await googlePromptAsync();
+    if(response.type === 'success') {
+      const { access_token } = response.params;
+      console.log("access", access_token);
+
+     const user = await googleLoginOrRegister(access_token);
+     
+     if (user) {
+      login(user);
+      navigation.goBack();
+     }
+
+    };
+  });
+
+  if (nativeRegister.isLoading || facebookRegister.isLoading || googleRegister.isLoading) return <Loading/>
 
   return (
     <KeyboardAwareScrollView>
@@ -59,28 +106,28 @@ const RegisterScreen = () => {
           Sign Up
         </Text>
         <Formik
-            initialValues={{
-              email: "",
-              password: "",
-              lastName: "",
-              firstName: "",
-            }}
-            validationSchema={yup.object().shape({
-              firstName: yup.string().required("Your first name is required"),
-              lastName: yup.string().required("Your last name is required"),
-              email: yup.string().email().required("Your email is required."),
-              password: yup
-                .string()
-                .required("A password is required.")
-                .matches(
-                  /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&-+=()!? "]).{8,128}$/,
-                  "Your password must have 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 special character."
-                ),
-            })}
-            onSubmit={(values) => {
-              nativeRegister.mutate(values);
-            }}
-          >
+          initialValues={{
+            email: "",
+            password: "",
+            lastName: "",
+            firstName: "",
+          }}
+          validationSchema={yup.object().shape({
+            firstName: yup.string().required("Your first name is required"),
+            lastName: yup.string().required("Your last name is required"),
+            email: yup.string().email().required("Your email is required."),
+            password: yup
+              .string()
+              .required("A password is required.")
+              .matches(
+                /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&-+=()!? "]).{8,128}$/,
+                "Your password must have 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 special character."
+              ),
+          })}
+          onSubmit={(values) => {
+            nativeRegister.mutate(values);
+          }}
+        >
           {({
             values,
             errors,
@@ -168,12 +215,12 @@ const RegisterScreen = () => {
                 <GoogleButton
                   text='Continue with Google'
                   style={styles.button}
-                  onPress={() => console.log('google register')}
+                  onPress={() => googleRegister.mutate()}
                 />
                 <FacebookButton
                   text="Continue with Facebook"
                   style={styles.button}
-                  onPress={() => console.log('Facebook register')}
+                  onPress={() => facebookRegister.mutate()}
                 />
                 {Platform.OS === 'ios' && (
                   <AppleButton

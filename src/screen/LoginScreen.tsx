@@ -1,14 +1,24 @@
 import * as yup from 'yup';
 import { Formik } from 'formik';
+import { 
+  Platform, 
+  StyleSheet, 
+  TouchableOpacity 
+} from 'react-native';
 import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Input, Text } from '@ui-kitten/components';
-import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
+import * as Google from 'expo-auth-session/providers/google';
+import * as Facebook from 'expo-auth-session/providers/facebook';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { useAuth } from '../hooks/useAuth';
-import { loginUser } from '../services/user';
 import { LISTMARGIN } from '../constants/Constants';
+import { 
+  loginUser, 
+  googleLoginOrRegister, 
+  facebookLoginOrRegister, 
+} from '../services/user';
 
 import OrDivider from './OrDivider';
 import Screen from '../components/layout/Screen';
@@ -23,6 +33,48 @@ const LoginScreen = () => {
   const navigation = useNavigation() as any;
   const { login } = useAuth();
 
+  const [___, _____, googlePromptAsync ] = Google.useAuthRequest({
+    expoClientId: "611513721528-6t92tdms9vhv6lp1sssq8nurt5kt79te.apps.googleusercontent.com",
+    iosClientId: "",
+    androidClientId: "",
+    webClientId: "",
+  });
+
+  const [ _, __, fbPropmtAsync ] = Facebook.useAuthRequest({
+    clientId: "249249161545512"
+  });
+
+  const facebookLogin = useMutation(async () => {
+    const response = await fbPropmtAsync();
+    if(response.type === 'success') {
+      const { access_token } = response.params;
+
+     const user = await facebookLoginOrRegister(access_token);
+
+     if (user) {
+      login(user);
+      navigation.goBack();
+     }
+
+    };
+  });
+
+  const googleLogin = useMutation(async () => {
+    const response = await googlePromptAsync();
+    if(response.type === 'success') {
+      const { access_token } = response.params;
+      console.log("access", access_token);
+
+     const user = await googleLoginOrRegister(access_token);
+     
+     if (user) {
+      login(user);
+      navigation.goBack();
+     }
+
+    };
+  });
+
   const nativeLogin = useMutation(async (values: { email: string; password: string }) => {
     const user = await loginUser(values.email, values.password);
     if (user) {
@@ -32,8 +84,7 @@ const LoginScreen = () => {
 
   });
 
-  if (nativeLogin.isLoading) return <Loading/>
-
+  if (nativeLogin.isLoading || facebookLogin.isLoading || googleLogin.isLoading) return <Loading/>
 
   return (
     <KeyboardAwareScrollView bounces={false}>
@@ -43,18 +94,18 @@ const LoginScreen = () => {
           Sign In
         </Text>
         <Formik
-            initialValues={{
-              email: "",
-              password: "",
-            }}
-            validationSchema={yup.object().shape({
-              email: yup.string().email().required("Your email is required."),
-              password: yup.string().required("A password is required."),
-            })}
-            onSubmit={(values) => {
-              nativeLogin.mutate(values);
-            }}
-          >
+          initialValues={{
+            email: "",
+            password: "",
+          }}
+          validationSchema={yup.object().shape({
+            email: yup.string().email().required("Your email is required."),
+            password: yup.string().required("A password is required."),
+          })}
+          onSubmit={(values) => {
+            nativeLogin.mutate(values);
+          }}
+        >
           {({
             values,
             errors,
@@ -116,12 +167,12 @@ const LoginScreen = () => {
                 <GoogleButton
                   text='Continue with Google'
                   style={styles.button}
-                  onPress={() => console.log('google login')}
+                  onPress={() => googleLogin.mutate()}
                 />
                 <FacebookButton
                   text="Continue with Facebook"
                   style={styles.button}
-                  onPress={() => console.log('Facebook login')}
+                  onPress={() => facebookLogin.mutate()}
                 />
                 {Platform.OS === 'ios' && (
                   <AppleButton
