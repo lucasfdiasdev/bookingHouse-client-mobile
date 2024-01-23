@@ -20,8 +20,11 @@ const locationEndpoint = serverUrl + location;
 const userEndpoint = serverUrl + user;
 
 export const endpoints = {
-  autoComplete: locationEndpoint + '/autocomplete',
-  search: locationEndpoint + '/search',
-  register: userEndpoint + '/register',
   login: userEndpoint + '/login',
+  apple: userEndpoint + '/apple',
+  google: userEndpoint + '/google',
+  register: userEndpoint + '/register',
+  facebook: userEndpoint + '/facebook',
+  search: locationEndpoint + '/search',
+  autoComplete: locationEndpoint + '/autocomplete',
 };

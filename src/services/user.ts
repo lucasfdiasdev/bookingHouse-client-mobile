@@ -45,3 +45,45 @@ export const loginUser = async (
     handleError(error);  
   };
 };
+
+export const facebookLoginOrRegister = async (accesToken: string) => {
+  try {
+    const { data }: DataRes = await axios.post(endpoints.facebook, {
+      accesToken
+    });
+
+    if (data) return data;
+
+    return null;
+
+  } catch (error) {
+    handleError(error);
+  };
+};
+
+export const googleLoginOrRegister = async (accesToken: string) => {
+  try {
+    const { data }: DataRes = await axios.post(endpoints.google, {
+      accesToken
+    });
+
+    if (data) return data;
+
+    return null;
+
+  } catch (error) {
+    handleError(error);
+  };
+
+};
+
+export const appleLoginOrRegister = async (identityToken: string) => {
+  try {
+    const { data }: DataRes = await axios.post(endpoints.apple, {
+      identityToken,
+    });
+    return data;
+  } catch (error) {
+    handleError(error);
+  }
+};
