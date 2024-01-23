@@ -1,23 +1,25 @@
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { 
-  Platform, 
-  StyleSheet, 
-  TouchableOpacity 
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native';
 import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Input, Text } from '@ui-kitten/components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import * as Google from 'expo-auth-session/providers/google';
 import * as Facebook from 'expo-auth-session/providers/facebook';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import * as AppleAuthentication from "expo-apple-authentication";
 
 import { useAuth } from '../hooks/useAuth';
 import { LISTMARGIN } from '../constants/Constants';
-import { 
-  loginUser, 
-  googleLoginOrRegister, 
-  facebookLoginOrRegister, 
+import {
+  loginUser,
+  appleLoginOrRegister,
+  googleLoginOrRegister,
+  facebookLoginOrRegister,
 } from '../services/user';
 
 import OrDivider from './OrDivider';
@@ -75,6 +77,24 @@ const LoginScreen = () => {
     };
   });
 
+  const appleLogin = useMutation(async () => {
+    const { identityToken } = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+      ],
+    });
+
+    if(identityToken) {
+      console.log("identityToken", identityToken);
+      const user = await appleLoginOrRegister(identityToken);
+      if(user) {
+        login(user);
+        navigation.goBack();
+      }
+    }
+  });
+
   const nativeLogin = useMutation(async (values: { email: string; password: string }) => {
     const user = await loginUser(values.email, values.password);
     if (user) {
@@ -84,7 +104,13 @@ const LoginScreen = () => {
 
   });
 
-  if (nativeLogin.isLoading || facebookLogin.isLoading || googleLogin.isLoading) return <Loading/>
+  if (
+    nativeLogin.isLoading || 
+    googleLogin.isLoading || 
+    facebookLogin.isLoading || 
+    appleLogin.isLoading
+  
+    ) return <Loading/>
 
   return (
     <KeyboardAwareScrollView bounces={false}>
@@ -174,12 +200,10 @@ const LoginScreen = () => {
                   style={styles.button}
                   onPress={() => facebookLogin.mutate()}
                 />
-                {Platform.OS === 'ios' && (
-                  <AppleButton
-                    type='sign-in'
-                    onPress={() => console.log('google login')}
-                  />)
-                }
+                <AppleButton
+                  type='sign-in'
+                  onPress={() => appleLogin.mutate()}
+                />
               </>
             );
           }}

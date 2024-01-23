@@ -1,22 +1,24 @@
 import * as yup from 'yup';
 import { Formik } from 'formik';
 import { 
-  Platform, 
   StyleSheet, 
 } from 'react-native';
 import { useMutation } from 'react-query';
 import { useNavigation } from '@react-navigation/native';
 import { Button, Input, Text } from '@ui-kitten/components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import * as Google from 'expo-auth-session/providers/google';
 import * as Facebook from 'expo-auth-session/providers/facebook';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import * as AppleAuthentication from "expo-apple-authentication";
 
 import { useAuth } from '../hooks/useAuth';
 import { LISTMARGIN } from '../constants/Constants';
 import { 
   registerUser, 
   googleLoginOrRegister, 
-  facebookLoginOrRegister, 
+  facebookLoginOrRegister,
+  appleLoginOrRegister, 
 } from '../services/user';
 
 import OrDivider from './OrDivider';
@@ -96,7 +98,30 @@ const RegisterScreen = () => {
     };
   });
 
-  if (nativeRegister.isLoading || facebookRegister.isLoading || googleRegister.isLoading) return <Loading/>
+  const appleRegister = useMutation(async () => {
+    const { identityToken } = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+      ],
+    });
+
+    if(identityToken) {
+      console.log("identityToken", identityToken);
+      const user = await appleLoginOrRegister(identityToken);
+      if(user) {
+        login(user);
+        navigation.goBack();
+      }
+    }
+  });
+
+  if (
+    nativeRegister.isLoading || 
+    googleRegister.isLoading ||
+    facebookRegister.isLoading || 
+    appleRegister.isLoading
+    ) return <Loading/>
 
   return (
     <KeyboardAwareScrollView>
@@ -222,12 +247,10 @@ const RegisterScreen = () => {
                   style={styles.button}
                   onPress={() => facebookRegister.mutate()}
                 />
-                {Platform.OS === 'ios' && (
-                  <AppleButton
-                    type='sign-up'
-                    onPress={() => console.log('google login')}
-                  />)
-                }
+                <AppleButton
+                  type='sign-up'
+                  onPress={() => appleRegister.mutate()}
+                />
               </>
             );
           }}
