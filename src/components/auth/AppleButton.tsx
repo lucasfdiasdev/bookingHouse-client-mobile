@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 
 const AppleButton = ({
